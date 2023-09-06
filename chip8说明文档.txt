@@ -15,17 +15,17 @@ chip8系统运行方式：
 
 	1.CPU：
 	chip8系统的cpu主要功能为：对储存在内存中的程序代码进行读取、解码后，按照chip8的代码规则执行相应操作。其内部主要含有：通用寄存器、指令寄存器、索引寄存器、栈顶寄存器和两个定时器。
-	1）通用寄存器(Register)：CPU有 16 个编号为 V0 ~ VF 的、大小为 8-bit 的通用寄存器。通常	情况下，VF寄存器用于标识位 flag 寄存器。
-	2）指令寄存器(Pointer Counter，简称PC)：一个大小为 16-bit 的指令寄存器，用于读取内存中	储存的指令。需要注意的是chip8的指令为8字节，而单个内存最大容量为4字节，故在导入指令至内存	时一条指令需要拆分成两份，使用两个内存空间存储。
+	1）通用寄存器(Register)：CPU有 16 个编号为 V0 ~ VF 的、大小为 8-bit 的通用寄存器。通常情况下，VF寄存器用于标识位 flag 寄存器。
+	2）指令寄存器(Pointer Counter，简称PC)：一个大小为 16-bit 的指令寄存器，用于读取内存中储存的指令。需要注意的是chip8的指令为8字节，而单个内存最大容量为4字节，故在导入指令至内存时一条指令需要拆分成两份，使用两个内存空间存储。
 	3）索引寄存器(Index，简称I)：一个大小为 16-bit 的地址索引寄存器。
 	4）栈顶寄存器(Stack Pointer，简称SP)：栈顶地址寄存器。chip8内存中为栈分配的大小为64-	Byte，起始地址为0xEA0。
-	5）定时器：chip8有延迟定时器（delay timer）和声音定时器（sound timer）。其大小均为 8-	bit，频率均为60Hz。
+	5）定时器：chip8有延迟定时器（delay timer）和声音定时器（sound timer）。其大小均为 8-bit，频率均为60Hz。
 
 	2.显示:
-	chip8的屏幕显示大小为64 * 32像素。由于该屏幕大小与当代电脑屏幕相较而言尺寸过小，故在本模	拟器程序中将屏幕像素整体等比放大10倍，即屏幕显示大小为640 * 320像素，单个像素尺寸为10 * 10	像素，以方便用户使用。
+	chip8的屏幕显示大小为64 * 32像素。由于该屏幕大小与当代电脑屏幕相较而言尺寸过小，故在本模拟器程序中将屏幕像素整体等比放大10倍，即屏幕显示大小为640 * 320像素，单个像素尺寸为10 * 10	像素，以方便用户使用。
 
 	3.内存：
-	chip8的内存大小为4KB。其中地址范围为 0x0000-0x01ff 的部分为chip8系统保留存储，多用于存	储字体。故程序起始地址（即pc指针初始位置）为0x200，程序可使用的内存地址范围为0x0200 - 	0x0e9f；栈可使用的内存地址范围为0x0ea0 - 0x0eff；屏幕可使用的内存地址范围为0x0f00 - 	0x0fff。
+	chip8的内存大小为4KB。其中地址范围为 0x0000-0x01ff 的部分为chip8系统保留存储，多用于存储字体。故程序起始地址（即pc指针初始位置）为0x200，程序可使用的内存地址范围为0x0200 - 0x0e9f；栈可使用的内存地址范围为0x0ea0 - 0x0eff；屏幕可使用的内存地址范围为0x0f00 - 0x0fff。
 	
 	4.键盘：
 	chip8键盘含有16个按键，映射关系如下：
@@ -51,10 +51,10 @@ chip8系统运行方式：
 00E0	Clear the screen 清屏
 00EE	Return from a subroutine 从子程序返回（将pc指针指向在进入该子程序的时候存到栈中的地址）
 1NNN	Jump to address NNN 跳转至地址NNN（即将pc指针指向地址NNN）
-2NNN	Execute subroutine starting at address NNN 执行位于地址NNN处的子程序（注意在跳转前将	pc指针入栈
-3XNN	Skip the following instruction if the value of register VX equals NN 如果寄存器VX的	值等于NN，则跳过以下指令
-4XNN	Skip the following instruction if the value of register VX is not equal to NN 如果	寄存器VX的值不等于NN，则跳过以下指令
-5XY0	Skip the following instruction if the value of register VX is equal to the value 	of register VY 如果寄存器VX的值等于寄存器VY的值，则跳过以下指令
+2NNN	Execute subroutine starting at address NNN 执行位于地址NNN处的子程序（注意在跳转前将pc指针入栈
+3XNN	Skip the following instruction if the value of register VX equals NN 如果寄存器VX的值等于NN，则跳过以下指令
+4XNN	Skip the following instruction if the value of register VX is not equal to NN 如果寄存器VX的值不等于NN，则跳过以下指令
+5XY0	Skip the following instruction if the value of register VX is equal to the value of register VY 如果寄存器VX的值等于寄存器VY的值，则跳过以下指令
 6XNN	Store number NN in register VX 将数字NN存储在寄存器VX中
 7XNN	Add the value NN to register VX 将数字NN与VX中现有值相加
 8XY0	Store the value of register VY in register VX 将寄存器VY的值存储在寄存器VX中
@@ -74,25 +74,25 @@ chip8系统运行方式：
 	Set VF to 00 if a borrow occurs 如果此时vx小于0，则将VF设置为00
 	Set VF to 01 if a borrow does not occur 如果此时vx仍然大于0，则将VF设置为01
 	记得在最后进行运算：vx &= 0xFF
-8XYE	Store the value of register VY shifted left one bit in register VX 将VY的值左移一位	后存储在VX中
-	Set register VF to the most significant bit prior to the shift 将VF设置为vx在被更改	前的高有效位
+8XYE	Store the value of register VY shifted left one bit in register VX 将VY的值左移一位后存储在VX中
+	Set register VF to the most significant bit prior to the shift 将VF设置为vx在被更改前的高有效位
 	VY is unchanged
 9XY0	Skip the following instruction if the value of register VX is not equal to the 	value of register VY 如果VX的值不等于VY的值，则跳过下一条指令
 ANNN	Store memory address NNN in register I 将内存地址NNN存储至寄存器I中
 BNNN	Jump to address NNN + V0 跳转至地址：NNN + v0
 CXNN	Set VX to a random number with a mask of NN vx = random_num & nn
-DXYN	Draw a sprite at position VX, VY with N bytes of sprite data starting at the 	address stored in I 在位置（vx ， vy）处开始绘制像素方块，具体绘制信息储存在内存中（比如	在一开始导入的字体信息），起始内存地址在寄存器I
-	Set VF to 01 if any set pixels are changed to unset, and 00 otherwise 如果某一像素	从显示被更改为不显示，则将VF设置为01，否则设置为00
-EX9E	Skip the following instruction if the key corresponding to the hex value currently 	stored in register VX is pressed 如果此时按下的按键与当前存储在寄存器VX中的十六进制值	对应的键相同，则跳过以下指令
-EXA1	Skip the following instruction if the key corresponding to the hex value currently 	stored in register VX is not pressed如果没有按下当前存储在寄存器VX中的十六进制值对应的	键，则跳过以下指令
-FX07	Store the current value of the delay timer in register VX 将延迟定时器的当前值存储在	VX中
+DXYN	Draw a sprite at position VX, VY with N bytes of sprite data starting at the address stored in I 在位置（vx ， vy）处开始绘制像素方块，具体绘制信息储存在内存中（比如在一开始导入的字体信息），起始内存地址在寄存器I
+	Set VF to 01 if any set pixels are changed to unset, and 00 otherwise 如果某一像素从显示被更改为不显示，则将VF设置为01，否则设置为00
+EX9E	Skip the following instruction if the key corresponding to the hex value currently stored in register VX is pressed 如果此时按下的按键与当前存储在寄存器VX中的十六进制值	对应的键相同，则跳过以下指令
+EXA1	Skip the following instruction if the key corresponding to the hex value currently stored in register VX is not pressed如果没有按下当前存储在寄存器VX中的十六进制值对应的	键，则跳过以下指令
+FX07	Store the current value of the delay timer in register VX 将延迟定时器的当前值存储在VX中
 FX0A	Wait for a keypress and store the result in register VX 等待按键并将结果存储在VX中
 FX15	Set the delay timer to the value of register VX 将延迟定时器设置为寄存器VX的值
 FX18	Set the sound timer to the value of register VX 将声音计时器设置为寄存器VX的值
 FX1E	Add the value stored in register VX to register I (I += VX)
-FX29	Set I to the memory address of the sprite data corresponding to the hexadecimal 	digit stored in register VX (I = vx * 5)
-FX33	Store the binary-coded decimal equivalent of the value stored in register VX at 	addresses I, I + 1, and I + 2 
-FX55	Store the values of registers V0 to VX inclusive in memory starting at address I 	将V0至VX的值存储在从存储在I中的地址开始的内存中
+FX29	Set I to the memory address of the sprite data corresponding to the hexadecimal digit stored in register VX (I = vx * 5)
+FX33	Store the binary-coded decimal equivalent of the value stored in register VX at addresses I, I + 1, and I + 2 
+FX55	Store the values of registers V0 to VX inclusive in memory starting at address I 将V0至VX的值存储在从存储在I中的地址开始的内存中
 	I is set to I + X + 1 after operation 存储完成后I的值为：I + X + 1
 FX65	Fill registers V0 to VX inclusive with the values stored in memory starting at 	address I 将从I开始的地址的内存数据依次填充寄存器V0至VX
 	I is set to I + X + 1 after operation 存储完成后I的值为：I + X + 1
